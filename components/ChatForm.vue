@@ -1,12 +1,40 @@
 <template>
   <div class="input-container">
-    <textarea></textarea>
+    <textarea v-model="text" @keydown.enter="addMessage"></textarea>
   </div>
 </template>
 
-<style>
-
-.input-container{
+<script>
+import { db } from '~/plugins/firebase'
+export default {
+  data() {
+    return {
+      text: null,
+    }
+  },
+  methods: {
+    addMessage(event) {
+      if (this.keyDownedForJPConversion(event)) {
+        return
+      }
+      const channelID = this.$route.params.id
+      db.collection('channels')
+        .doc(channelID)
+        .collection('messages')
+        .add({ text: this.text, createdAt: new Date().getTime() })
+        .then(() => {
+          this.text = null
+        })
+    },
+    keyDownedForJPConversion(event) {
+      const codeForConversion = 229
+      return event.keyCode === codeForConversion
+    },
+  },
+}
+</script>
+<style scoped>
+.input-container {
   padding: 10px;
   height: 100%;
 }
