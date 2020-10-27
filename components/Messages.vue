@@ -1,6 +1,10 @@
 <template>
   <div class="chats-container">
-    <message v-for="message in messages" :key="message" :message="message" />
+    <message
+      v-for="(message, index) in messages"
+      :key="index"
+      :message="message"
+    />
   </div>
 </template>
 
@@ -11,9 +15,11 @@ export default {
   components: {
     Message,
   },
+  // eslint-disable-next-line
   props: ['messages'],
 
   mounted() {
+    // eslint-disable-next-line
     console.log(this.messages)
   },
 }
